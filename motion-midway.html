@@ -1422,6 +1422,9 @@ function playGameOverJingle() {
 async function startCamera() {
   camStatus.textContent = 'กำลังขอสิทธิ์ใช้กล้อง...';
   try {
+    if (!navigator.mediaDevices?.getUserMedia) {
+      throw new Error('เบราว์เซอร์นี้ไม่รองรับการใช้กล้อง');
+    }
     stream = await navigator.mediaDevices.getUserMedia({
       video: { width: { ideal: 960 }, height: { ideal: 720 }, facingMode: 'user' },
       audio: false
@@ -1433,12 +1436,27 @@ async function startCamera() {
     }
     video.srcObject = stream;
     await video.play();
+    drawCameraPreview();
     camStatus.textContent = '';
     return true;
   } catch (err) {
-    camStatus.textContent = 'ไม่สามารถเข้าถึงกล้องได้ กรุณาอนุญาตการใช้กล้องแล้วลองใหม่ (ต้องเปิดผ่าน http://localhost หรือ https)';
+    const reason = err?.name === 'NotAllowedError'
+      ? 'เบราว์เซอร์ยังไม่อนุญาตกล้อง ให้กดไอคอนแม่กุญแจข้าง URL แล้วเลือก Allow'
+      : err?.name === 'NotFoundError'
+        ? 'ไม่พบกล้อง กรุณาเสียบกล้องหรือปิดโปรแกรมอื่นที่กำลังใช้งานกล้อง'
+        : err?.message || 'ไม่สามารถเข้าถึงกล้องได้';
+    camStatus.textContent = `${reason} (ต้องเปิดผ่าน https หรือ localhost)`;
     return false;
   }
+}
+
+function drawCameraPreview() {
+  if (running || video.readyState < 2) return;
+  ctx.save();
+  ctx.translate(W, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, W, H);
+  ctx.restore();
 }
 
 // ---------- Spawning ----------
