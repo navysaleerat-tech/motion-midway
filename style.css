@@ -1,0 +1,232 @@
+:root {
+  --navy: #171b34;
+  --navy-deep: #0e1124;
+  --bulb: #ffd23f;
+  --red: #e6484f;
+  --teal: #2ec4b6;
+  --cream: #fff8e7;
+  --ink: #241c1c;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -10%, #2a2f57 0%, var(--navy) 45%, var(--navy-deep) 100%);
+  color: var(--cream);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 2.5rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* string lights across the top */
+.lights {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40px;
+  background-image: radial-gradient(circle, var(--bulb) 0 5px, transparent 6px);
+  background-size: 48px 40px;
+  background-position: 0 -6px;
+  opacity: 0.9;
+  animation: twinkle 2.4s ease-in-out infinite alternate;
+  pointer-events: none;
+}
+@keyframes twinkle {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+.marquee {
+  text-align: center;
+  margin: 1.75rem 0 1.25rem;
+}
+
+.marquee h1 {
+  font-family: 'Bungee', cursive;
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  letter-spacing: 0.03em;
+  margin: 0;
+  color: var(--cream);
+  text-shadow:
+    3px 3px 0 var(--red),
+    6px 6px 0 rgba(0,0,0,0.25);
+}
+.marquee h1 span { color: var(--teal); }
+
+.tagline {
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  color: #cfd3f0;
+}
+
+.booth {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  border: 6px solid var(--bulb);
+  box-shadow:
+    0 0 0 3px var(--red),
+    0 18px 40px rgba(0,0,0,0.5);
+}
+
+video {
+  display: none;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlay-screen {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 17, 36, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  backdrop-filter: blur(2px);
+}
+.overlay-screen.hidden { display: none; }
+
+.ticket {
+  background: var(--cream);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 1.5rem 1.75rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 12px 28px rgba(0,0,0,0.4);
+}
+.ticket::before, .ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background: var(--navy-deep);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.ticket::before { left: -11px; }
+.ticket::after { right: -11px; }
+
+.ticket-label {
+  font-family: 'Bungee', cursive;
+  color: var(--red);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.4rem;
+}
+
+.ticket h2 {
+  font-size: 1.25rem;
+  margin: 0 0 1rem;
+  line-height: 1.4;
+}
+
+.rules {
+  text-align: left;
+  margin: 0 0 1.25rem;
+  padding-left: 1.2rem;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #4a3f3f;
+}
+
+.btn-carnival {
+  font-family: 'Bungee', cursive;
+  font-size: 1rem;
+  color: var(--cream);
+  background: var(--red);
+  border: none;
+  border-radius: 999px;
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #a5262b;
+  transition: transform 0.08s ease;
+}
+.btn-carnival:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #a5262b;
+}
+
+.cam-status {
+  margin: 0.9rem 0 0;
+  font-size: 0.82rem;
+  color: #7a6e6e;
+  min-height: 1.1em;
+}
+
+.best-score {
+  font-size: 0.95rem;
+  color: #5a4d4d;
+  margin: -0.5rem 0 1.1rem;
+}
+
+.hud {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 420px;
+  justify-content: center;
+}
+
+.counter {
+  background: var(--navy-deep);
+  border: 2px solid var(--bulb);
+  border-radius: 10px;
+  padding: 0.6rem 1.4rem;
+  text-align: center;
+  min-width: 110px;
+}
+
+.counter-label {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+  margin-bottom: 0.2rem;
+}
+
+.counter-value {
+  display: block;
+  font-family: 'Bungee', cursive;
+  font-size: 1.6rem;
+  color: var(--bulb);
+}
+
+.footer-note {
+  margin-top: 1.75rem;
+  font-size: 0.78rem;
+  color: #7d81a8;
+  text-align: center;
+  max-width: 480px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lights { animation: none; }
+}

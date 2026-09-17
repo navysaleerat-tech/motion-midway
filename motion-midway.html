@@ -1,0 +1,1972 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Motion Midway — จิ้มลูกโป่งด้วยนิ้ว</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --navy: #171b34;
+  --navy-deep: #0e1124;
+  --bulb: #ffd23f;
+  --red: #e6484f;
+  --teal: #2ec4b6;
+  --cream: #fff8e7;
+  --ink: #241c1c;
+  font-size: 16px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(ellipse at 50% -10%, #2a2f57 0%, var(--navy) 45%, var(--navy-deep) 100%);
+  color: var(--cream);
+  font-family: 'Poppins', sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 1rem 2.5rem;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* string lights across the top */
+.lights {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 40px;
+  background-image: radial-gradient(circle, var(--bulb) 0 5px, transparent 6px);
+  background-size: 48px 40px;
+  background-position: 0 -6px;
+  opacity: 0.9;
+  animation: twinkle 2.4s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 1;
+}
+@keyframes twinkle {
+  from { opacity: 0.55; }
+  to { opacity: 1; }
+}
+
+/* ambient rising sparkles behind everything */
+.sparkles {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+.sparkle {
+  position: absolute;
+  bottom: -10px;
+  border-radius: 50%;
+  background: var(--bulb);
+  opacity: 0;
+  animation-name: rise-twinkle;
+  animation-timing-function: ease-in;
+  animation-iteration-count: infinite;
+}
+@keyframes rise-twinkle {
+  0%   { transform: translateY(0) scale(0.6); opacity: 0; }
+  10%  { opacity: 0.85; }
+  90%  { opacity: 0.4; }
+  100% { transform: translateY(-100vh) scale(1); opacity: 0; }
+}
+
+.marquee {
+  text-align: center;
+  margin: 1.75rem 0 1.25rem;
+  position: relative;
+  z-index: 1;
+}
+
+.marquee h1 {
+  font-family: 'Bungee', cursive;
+  font-size: clamp(2.1rem, 6vw, 3.4rem);
+  letter-spacing: 0.03em;
+  margin: 0;
+  color: var(--cream);
+  text-shadow:
+    3px 3px 0 var(--red),
+    6px 6px 0 rgba(0,0,0,0.25),
+    0 0 22px rgba(255, 210, 63, 0.35);
+  animation: marquee-glow 3.2s ease-in-out infinite;
+}
+.marquee h1 span { color: var(--teal); }
+
+@keyframes marquee-glow {
+  0%, 100% { text-shadow: 3px 3px 0 var(--red), 6px 6px 0 rgba(0,0,0,0.25), 0 0 18px rgba(255, 210, 63, 0.25); }
+  50%      { text-shadow: 3px 3px 0 var(--red), 6px 6px 0 rgba(0,0,0,0.25), 0 0 34px rgba(255, 210, 63, 0.55); }
+}
+
+.tagline {
+  margin: 0.6rem 0 0;
+  font-size: 1rem;
+  color: #cfd3f0;
+}
+
+.booth {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  position: relative;
+  z-index: 1;
+}
+
+.layout {
+  width: 100%;
+  max-width: 1080px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1.75rem;
+  position: relative;
+  z-index: 1;
+}
+
+.scoreboard {
+  flex: 1 1 260px;
+  max-width: 300px;
+  background: var(--navy-deep);
+  border: 3px dashed var(--bulb);
+  border-radius: 14px;
+  padding: 1.1rem 1.15rem 1.25rem;
+  box-shadow: 0 12px 26px rgba(0,0,0,0.4);
+}
+
+.scoreboard-header {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.1rem;
+}
+.scoreboard-icon { font-size: 1.3rem; }
+.scoreboard-header h2 {
+  font-family: 'Bungee', cursive;
+  font-size: 1.05rem;
+  color: var(--bulb);
+  margin: 0;
+}
+.scoreboard-sub {
+  margin: 0.15rem 0 0.9rem;
+  font-size: 0.75rem;
+  color: #9aa0c8;
+}
+
+.score-list {
+  list-style: none;
+  margin: 0 0 0.4rem;
+  padding: 0;
+  max-height: 360px;
+  overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: var(--bulb) transparent;
+}
+.score-list::-webkit-scrollbar { width: 6px; }
+.score-list::-webkit-scrollbar-thumb { background: var(--bulb); border-radius: 999px; }
+
+.score-row {
+  position: relative;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 0.5rem 0.6rem;
+  padding: 0.5rem 0.2rem;
+  border-bottom: 1px dashed rgba(255, 248, 231, 0.18);
+  animation: row-pop 0.35s ease-out;
+}
+.score-row:last-child { border-bottom: none; }
+.score-row.best {
+  background: rgba(255, 210, 63, 0.08);
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 1px rgba(255, 210, 63, 0.35);
+}
+@keyframes row-pop {
+  0%   { transform: translateX(-8px); opacity: 0; }
+  100% { transform: translateX(0); opacity: 1; }
+}
+
+.score-round {
+  font-family: 'Bungee', cursive;
+  font-size: 0.68rem;
+  color: #9aa0c8;
+  background: rgba(255,248,231,0.08);
+  border-radius: 999px;
+  padding: 0.15rem 0.45rem;
+  grid-row: 1 / 3;
+}
+
+.score-points {
+  font-family: 'Bungee', cursive;
+  font-size: 1.05rem;
+  color: var(--cream);
+}
+
+.score-tier {
+  font-size: 0.68rem;
+  font-weight: 600;
+  grid-column: 2;
+}
+.score-name {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 600;
+  color: var(--cream);
+}
+
+.score-time {
+  font-size: 0.65rem;
+  color: #7d81a8;
+  grid-column: 3;
+  grid-row: 1 / 3;
+  align-self: center;
+}
+
+.score-crown {
+  position: absolute;
+  top: -6px;
+  right: -2px;
+  font-size: 0.9rem;
+  filter: drop-shadow(0 0 4px rgba(255, 210, 63, 0.8));
+}
+
+.score-empty {
+  font-size: 0.78rem;
+  color: #7d81a8;
+  text-align: center;
+  padding: 1rem 0;
+}
+
+.btn-clear {
+  display: block;
+  margin: 0.85rem auto 0;
+  background: none;
+  border: 1px solid rgba(255, 248, 231, 0.3);
+  color: var(--cream);
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.72rem;
+  padding: 0.4rem 1rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, color 0.2s ease;
+}
+.btn-clear:hover {
+  border-color: var(--red);
+  color: var(--red);
+}
+
+@media (max-width: 860px) {
+  .scoreboard { flex-basis: 100%; max-width: 480px; }
+}
+
+/* pennant bunting above the stage */
+.pennants {
+  width: calc(100% - 12px);
+  height: 22px;
+  background-image:
+    linear-gradient(135deg, transparent 50%, var(--red) 50%),
+    linear-gradient(-135deg, transparent 50%, var(--bulb) 50%);
+  background-size: 28px 22px, 28px 22px;
+  background-repeat: repeat-x;
+  background-position: 0 0, 14px 0;
+  filter: drop-shadow(0 2px 3px rgba(0,0,0,0.35));
+}
+
+.stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #000;
+  border: 6px solid var(--bulb);
+  box-shadow:
+    0 0 0 3px var(--red),
+    0 18px 40px rgba(0,0,0,0.5);
+}
+
+video {
+  display: none;
+}
+
+#gameCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.overlay-screen {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 17, 36, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+  backdrop-filter: blur(2px);
+}
+.overlay-screen.hidden { display: none; }
+
+.ticket {
+  background: linear-gradient(155deg, #fffdf4 0%, #fff4d8 100%);
+  color: var(--ink);
+  border-radius: 10px;
+  border: 1px solid rgba(255, 210, 63, 0.55);
+  padding: 1.75rem 1.75rem 1.5rem;
+  max-width: 420px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  box-shadow: 0 18px 36px rgba(0,0,0,0.42), 0 0 0 5px rgba(255, 210, 63, 0.08);
+  animation: ticket-pop 0.4s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+@keyframes ticket-pop {
+  0%   { transform: scale(0.85) translateY(12px); opacity: 0; }
+  100% { transform: scale(1) translateY(0); opacity: 1; }
+}
+.ticket::before, .ticket::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 22px;
+  height: 22px;
+  background: var(--navy-deep);
+  border-radius: 50%;
+  transform: translateY(-50%);
+}
+.ticket::before { left: -11px; }
+.ticket::after { right: -11px; }
+
+.ticket-label {
+  display: inline-block;
+  font-family: 'Bungee', cursive;
+  color: var(--red);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  margin: 0 0 0.6rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  background: rgba(230, 72, 79, 0.1);
+}
+
+.ticket h2 {
+  font-size: 1.4rem;
+  margin: 0 auto 1.1rem;
+  max-width: 340px;
+  line-height: 1.4;
+}
+
+.final-tier {
+  font-family: 'Bungee', cursive;
+  font-size: 0.95rem;
+  margin: -0.6rem 0 0.9rem;
+}
+
+.rules {
+  text-align: left;
+  margin: 0 auto 1.25rem;
+  padding: 0.75rem 0.9rem 0.75rem 2rem;
+  max-width: 350px;
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #4a3f3f;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.45);
+  box-shadow: inset 0 0 0 1px rgba(36, 28, 28, 0.07);
+}
+
+.difficulty-select {
+  margin: 0 0 1.1rem;
+}
+.difficulty-label {
+  font-family: 'Bungee', cursive;
+  font-size: 0.68rem;
+  letter-spacing: 0.03em;
+  color: #6b5f5f;
+  margin: 0 0 0.5rem;
+}
+.player-name-field {
+  margin: 0 0 1rem;
+  text-align: left;
+}
+.player-name-label {
+  display: block;
+  font-family: 'Bungee', cursive;
+  font-size: 0.68rem;
+  color: #6b5f5f;
+  margin: 0 0 0.45rem;
+}
+.player-name-input {
+  width: 100%;
+  border: 2px solid rgba(36, 28, 28, 0.18);
+  border-radius: 8px;
+  padding: 0.6rem 0.75rem;
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--ink);
+  font: 600 0.9rem 'Poppins', sans-serif;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+.player-name-input:focus {
+  border-color: var(--red);
+  box-shadow: 0 0 0 3px rgba(230, 72, 79, 0.16);
+}
+
+.difficulty-options {
+  display: flex;
+  gap: 0.4rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.diff-btn {
+  font-family: 'Poppins', sans-serif;
+  font-weight: 600;
+  font-size: 0.78rem;
+  padding: 0.42rem 0.85rem;
+  border-radius: 999px;
+  border: 2px solid rgba(36, 28, 28, 0.18);
+  background: transparent;
+  color: var(--ink);
+  cursor: pointer;
+  transition: transform 0.1s ease, border-color 0.15s ease, background 0.15s ease, color 0.15s ease;
+}
+.diff-btn:hover { border-color: var(--red); }
+.diff-btn.active {
+  background: var(--red);
+  color: var(--cream);
+  border-color: var(--red);
+  box-shadow: 0 3px 0 #a5262b;
+  transform: translateY(-1px);
+}
+.diff-btn[data-diff="easy"].active   { background: var(--teal); border-color: var(--teal); box-shadow: 0 3px 0 #1c8c81; }
+.diff-btn[data-diff="hard"].active   { background: #f2a541; border-color: #f2a541; box-shadow: 0 3px 0 #b9762a; }
+.diff-btn[data-diff="extreme"].active{ background: #7a67d8; border-color: #7a67d8; box-shadow: 0 3px 0 #4f3fa0; }
+
+.btn-carnival {
+  font-family: 'Bungee', cursive;
+  font-size: 1rem;
+  color: var(--cream);
+  background: var(--red);
+  border: none;
+  border-radius: 999px;
+  min-width: 190px;
+  padding: 0.85rem 2rem;
+  cursor: pointer;
+  box-shadow: 0 4px 0 #a5262b, 0 0 0 0 rgba(230, 72, 79, 0.5);
+  transition: transform 0.08s ease, box-shadow 0.2s ease;
+  animation: btn-breathe 2.2s ease-in-out infinite;
+}
+.btn-carnival:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #a5262b, 0 0 18px 2px rgba(230, 72, 79, 0.55);
+}
+.btn-carnival:active {
+  transform: translateY(3px);
+  box-shadow: 0 1px 0 #a5262b;
+}
+.btn-carnival:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  animation: none;
+}
+@keyframes btn-breathe {
+  0%, 100% { box-shadow: 0 4px 0 #a5262b, 0 0 0 0 rgba(230, 72, 79, 0.45); }
+  50%      { box-shadow: 0 4px 0 #a5262b, 0 0 14px 3px rgba(230, 72, 79, 0.45); }
+}
+
+.cam-status {
+  margin: 0.9rem 0 0;
+  font-size: 0.82rem;
+  color: #7a6e6e;
+  min-height: 1.1em;
+}
+
+.best-score {
+  font-size: 0.95rem;
+  color: #5a4d4d;
+  margin: 0 0 1.1rem;
+}
+
+.hud {
+  display: flex;
+  gap: 1.5rem;
+  width: 100%;
+  max-width: 480px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.counter {
+  background: var(--navy-deep);
+  border: 1px solid rgba(255, 210, 63, 0.7);
+  border-radius: 14px;
+  padding: 0.85rem 1rem 0.9rem;
+  text-align: center;
+  min-width: 0;
+  flex: 1 1 220px;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.25), inset 0 0 22px rgba(255, 210, 63, 0.04);
+}
+
+.score-counter {
+  text-align: left;
+}
+
+.counter.penalty {
+  animation: penalty-pulse 0.4s ease-out;
+}
+@keyframes penalty-pulse {
+  0% { border-color: var(--red); box-shadow: 0 0 0 0 rgba(230, 72, 79, 0.6); }
+  100% { border-color: var(--bulb); box-shadow: 0 0 0 10px rgba(230, 72, 79, 0); }
+}
+.counter.tier-up {
+  animation: tier-up-pulse 0.6s ease-out;
+}
+@keyframes tier-up-pulse {
+  0% { border-color: var(--cream); box-shadow: 0 0 0 0 rgba(255, 248, 231, 0.7); }
+  100% { border-color: var(--bulb); box-shadow: 0 0 0 14px rgba(255, 248, 231, 0); }
+}
+
+.counter-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.5rem;
+}
+
+.counter-label {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--teal);
+  letter-spacing: 0.06em;
+}
+
+.tier-label {
+  font-family: 'Bungee', cursive;
+  font-size: 0.62rem;
+  letter-spacing: 0.03em;
+  color: var(--bulb);
+  transition: color 0.3s ease;
+}
+
+.counter-value {
+  display: block;
+  font-family: 'Bungee', cursive;
+  font-size: 2.15rem;
+  color: var(--bulb);
+  margin: 0.15rem 0 0.45rem;
+  line-height: 1;
+}
+
+.tier-bar-track {
+  position: relative;
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(255, 248, 231, 0.12);
+  overflow: hidden;
+}
+
+.tier-bar-fill {
+  position: relative;
+  height: 100%;
+  width: 0%;
+  border-radius: 999px;
+  background: var(--bulb);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(255,255,255,0.28) 0 6px,
+    transparent 6px 12px
+  );
+  transition: width 0.35s ease, background-color 0.3s ease;
+  box-shadow: 0 0 8px 1px currentColor;
+}
+
+.timer-counter {
+  min-width: 110px;
+  flex: 0 1 132px;
+  text-align: center;
+}
+
+.timer-ring-wrap {
+  position: relative;
+  width: 64px;
+  height: 64px;
+  margin: 0.2rem auto 0;
+}
+
+.timer-ring {
+  width: 100%;
+  height: 100%;
+  transform: rotate(-90deg);
+}
+.timer-ring-bg {
+  fill: none;
+  stroke: rgba(255, 248, 231, 0.12);
+  stroke-width: 7;
+}
+.timer-ring-fg {
+  fill: none;
+  stroke: var(--teal);
+  stroke-width: 7;
+  stroke-linecap: round;
+  stroke-dasharray: 213.6;
+  stroke-dashoffset: 0;
+  transition: stroke-dashoffset 0.25s linear, stroke 0.3s ease;
+}
+
+.timer-value {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.15rem;
+  margin: 0;
+}
+
+@media (max-width: 520px) {
+  .ticket {
+    padding: 1.35rem 1rem 1.15rem;
+  }
+  .ticket h2 {
+    font-size: 1.18rem;
+  }
+  .rules {
+    font-size: 0.82rem;
+    padding-left: 1.7rem;
+  }
+  .hud {
+    gap: 0.7rem;
+  }
+  .counter {
+    padding-inline: 0.75rem;
+  }
+  .counter-label {
+    font-size: 0.68rem;
+  }
+  .counter-value {
+    font-size: 1.7rem;
+  }
+}
+
+.timer-ring-wrap.danger {
+  animation: ring-danger 0.6s ease-in-out infinite;
+}
+@keyframes ring-danger {
+  0%, 100% { filter: drop-shadow(0 0 0px var(--red)); }
+  50%      { filter: drop-shadow(0 0 8px var(--red)); }
+}
+
+.footer-note {
+  margin-top: 1.75rem;
+  font-size: 0.78rem;
+  color: #7d81a8;
+  text-align: center;
+  max-width: 480px;
+  position: relative;
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lights, .sparkle, .marquee h1, .btn-carnival, .timer-ring-wrap.danger { animation: none; }
+}
+
+  </style>
+</head>
+<body>
+
+  <div class="lights" aria-hidden="true"></div>
+  <div class="sparkles" id="sparkles" aria-hidden="true"></div>
+
+  <header class="marquee">
+    <h1>MOTION <span>MIDWAY</span></h1>
+    <p class="tagline">ยื่นนิ้วชี้จิ้มลูกโป่ง หลบลูกระเบิดให้ดี!</p>
+  </header>
+
+  <main class="layout">
+
+    <div class="booth">
+
+      <div class="pennants" aria-hidden="true"></div>
+
+      <div class="stage" id="stage">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="gameCanvas"></canvas>
+
+        <!-- START SCREEN -->
+        <section class="overlay-screen" id="startScreen">
+          <div class="ticket">
+            <p class="ticket-label">พร้อมเล่นหรือยัง?</p>
+            <h2>อนุญาตให้ใช้กล้อง แล้วใช้นิ้วจิ้มลูกโป่ง</h2>
+            <ul class="rules">
+              <li>ยืนให้เห็นมือของคุณในกล้อง</li>
+              <li>ยื่นนิ้วชี้ไปจิ้มลูกโป่งที่ลอยขึ้นมา</li>
+              <li>ลูกระเบิดมาถี่มาก จิ้มโดนจะเสียแต้ม!</li>
+              <li>ถ้านิ้วหลุดจากกล้องนานเกินไปจะโดนหักแต้ม</li>
+              <li>เก็บคอมโบต่อเนื่องเพื่อแต้มโบนัส</li>
+              <li>มีเวลา 60 วินาที เก็บคะแนนให้ได้มากที่สุด</li>
+            </ul>
+            <div class="player-name-field">
+              <label class="player-name-label" for="playerName">ชื่อผู้เล่น</label>
+              <input class="player-name-input" id="playerName" type="text" maxlength="24" autocomplete="nickname" placeholder="พิมพ์ชื่อของคุณ">
+            </div>
+            <div class="difficulty-select">
+              <p class="difficulty-label">เลือกระดับความยาก</p>
+              <div class="difficulty-options">
+                <button type="button" class="diff-btn" data-diff="easy">ง่าย</button>
+                <button type="button" class="diff-btn" data-diff="normal">ปกติ</button>
+                <button type="button" class="diff-btn" data-diff="hard">ยาก</button>
+                <button type="button" class="diff-btn" data-diff="extreme">ยากมาก</button>
+              </div>
+            </div>
+            <button class="btn-carnival" id="startBtn">เริ่มเกม</button>
+            <p class="cam-status" id="camStatus"></p>
+          </div>
+        </section>
+
+        <!-- GAME OVER SCREEN -->
+        <section class="overlay-screen hidden" id="endScreen">
+          <div class="ticket">
+            <p class="ticket-label">หมดเวลา!</p>
+            <h2 id="finalScoreText">คุณได้ 0 ตั๋ว</h2>
+            <p class="final-tier" id="finalTierText"></p>
+            <p class="best-score" id="bestScoreText"></p>
+            <div class="difficulty-select">
+              <p class="difficulty-label">เลือกระดับความยาก</p>
+              <div class="difficulty-options">
+                <button type="button" class="diff-btn" data-diff="easy">ง่าย</button>
+                <button type="button" class="diff-btn" data-diff="normal">ปกติ</button>
+                <button type="button" class="diff-btn" data-diff="hard">ยาก</button>
+                <button type="button" class="diff-btn" data-diff="extreme">ยากมาก</button>
+              </div>
+            </div>
+            <button class="btn-carnival" id="restartBtn">เล่นอีกครั้ง</button>
+          </div>
+        </section>
+
+      </div>
+
+      <div class="hud">
+        <div class="counter score-counter" id="scoreCounter">
+          <div class="counter-top">
+            <span class="counter-label">ตั๋วที่ได้รับ</span>
+            <span class="tier-label" id="tierLabel">บรอนซ์</span>
+          </div>
+          <span class="counter-value" id="scoreValue">0</span>
+          <div class="tier-bar-track">
+            <div class="tier-bar-fill" id="tierBarFill"></div>
+          </div>
+        </div>
+
+        <div class="counter timer-counter">
+          <span class="counter-label">เวลา</span>
+          <div class="timer-ring-wrap" id="timerRingWrap">
+            <svg class="timer-ring" viewBox="0 0 80 80">
+              <circle class="timer-ring-bg" cx="40" cy="40" r="34"></circle>
+              <circle class="timer-ring-fg" id="timerRingFg" cx="40" cy="40" r="34"></circle>
+            </svg>
+            <span class="counter-value timer-value" id="timeValue">60</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <aside class="scoreboard">
+      <div class="scoreboard-header">
+        <span class="scoreboard-icon">🏆</span>
+        <h2>กระดานคะแนน</h2>
+      </div>
+      <p class="scoreboard-sub">ผลแต่ละรอบที่เล่น</p>
+      <ol class="score-list" id="scoreList"></ol>
+      <p class="score-empty" id="scoreEmpty">ยังไม่มีรอบที่เล่น เริ่มเกมเพื่อบันทึกคะแนน!</p>
+      <button class="btn-clear" id="clearScoresBtn">ล้างประวัติ</button>
+    </aside>
+
+  </main>
+
+  <footer class="footer-note">
+    <p>ประมวลผลวิดีโอทั้งหมดในเบราว์เซอร์ของคุณเอง ไม่มีการส่งภาพจากกล้องออกไปที่ไหน (โมเดลตรวจจับมือโหลดมาครั้งเดียวตอนเริ่มหน้าเว็บ)</p>
+  </footer>
+
+  <script type="module">
+// ---------- Motion Midway ----------
+// Webcam carnival game: poke balloons with your index fingertip.
+// Bombs float up too, and now show up a lot more often — touch one and
+// you lose points, so dodge them. Chain balloon pops for combo bonuses,
+// and climb the prize tiers as your score bar fills up.
+//
+// Fingertip tracking uses MediaPipe's HandLandmarker (runs fully on-device,
+// via WASM/WebGL — no video ever leaves the browser). If the hand-tracking
+// model can't load (offline, unsupported browser, etc.) the game falls
+// back to simple frame-difference motion detection so it still works.
+
+import { HandLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
+
+const video = document.getElementById('video');
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+const startScreen = document.getElementById('startScreen');
+const endScreen = document.getElementById('endScreen');
+const startBtn = document.getElementById('startBtn');
+const restartBtn = document.getElementById('restartBtn');
+const camStatus = document.getElementById('camStatus');
+const playerNameInput = document.getElementById('playerName');
+const scoreValueEl = document.getElementById('scoreValue');
+const timeValueEl = document.getElementById('timeValue');
+const finalScoreText = document.getElementById('finalScoreText');
+const finalTierText = document.getElementById('finalTierText');
+const bestScoreText = document.getElementById('bestScoreText');
+const scoreCounterEl = document.getElementById('scoreCounter');
+const tierBarFillEl = document.getElementById('tierBarFill');
+const tierLabelEl = document.getElementById('tierLabel');
+const timerRingFg = document.getElementById('timerRingFg');
+const timerRingWrap = document.getElementById('timerRingWrap');
+const sparklesEl = document.getElementById('sparkles');
+const scoreListEl = document.getElementById('scoreList');
+const scoreEmptyEl = document.getElementById('scoreEmpty');
+const clearScoresBtn = document.getElementById('clearScoresBtn');
+
+const W = 640, H = 480;
+canvas.width = W;
+canvas.height = H;
+const trackingCanvas = document.createElement('canvas');
+trackingCanvas.width = W;
+trackingCanvas.height = H;
+const trackingCtx = trackingCanvas.getContext('2d');
+
+const BALLOON_COLORS = ['#e6484f', '#2ec4b6', '#ffd23f', '#f2a541', '#7a67d8'];
+const BEST_KEY = 'motionMidwayBestScore';
+const HISTORY_KEY = 'motionMidwayHistory';
+const PLAYER_NAME_KEY = 'motionMidwayPlayerName';
+const HISTORY_LIMIT = 12;
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// Prize tiers for the score bar — each entry is the score needed to *reach* it.
+const TIER_THRESHOLDS = [0, 250, 550, 900, 1300];
+const TIER_NAMES = ['บรอนซ์', 'ซิลเวอร์', 'โกลด์', 'ไดมอนด์', 'เลเจนด์'];
+const TIER_COLORS = ['#c98a4b', '#c3cbe0', '#ffd23f', '#7fe3ff', '#ff6fd8'];
+
+// Difficulty presets — control bomb frequency, spawn rate, item speed,
+// and how harshly losing hand tracking is punished.
+const DIFFICULTY_PRESETS = {
+  easy: {
+    label: 'ง่าย',
+    bombBase: 0.14, bombRamp: 0.003, bombMax: 0.35,
+    spawnBase: 1.3, spawnRamp: 0.008, spawnMin: 0.5,
+    speedMult: 0.85,
+    noHandPenalty: 8
+  },
+  normal: {
+    label: 'ปกติ',
+    bombBase: 0.24, bombRamp: 0.006, bombMax: 0.55,
+    spawnBase: 1.05, spawnRamp: 0.012, spawnMin: 0.3,
+    speedMult: 1.0,
+    noHandPenalty: 14
+  },
+  hard: {
+    label: 'ยาก',
+    bombBase: 0.32, bombRamp: 0.008, bombMax: 0.65,
+    spawnBase: 0.85, spawnRamp: 0.015, spawnMin: 0.22,
+    speedMult: 1.18,
+    noHandPenalty: 20
+  },
+  extreme: {
+    label: 'ยากมาก',
+    bombBase: 0.42, bombRamp: 0.01, bombMax: 0.75,
+    spawnBase: 0.65, spawnRamp: 0.018, spawnMin: 0.16,
+    speedMult: 1.4,
+    noHandPenalty: 28
+  }
+};
+const DIFFICULTY_KEY = 'motionMidwayDifficulty';
+let selectedDifficulty = localStorage.getItem(DIFFICULTY_KEY) || 'normal';
+if (!DIFFICULTY_PRESETS[selectedDifficulty]) selectedDifficulty = 'normal';
+
+function currentPreset() {
+  return DIFFICULTY_PRESETS[selectedDifficulty];
+}
+
+function initDifficultyUI() {
+  const buttons = Array.from(document.querySelectorAll('.diff-btn'));
+  function refresh() {
+    buttons.forEach((b) => b.classList.toggle('active', b.dataset.diff === selectedDifficulty));
+  }
+  refresh();
+  buttons.forEach((btn) => {
+    btn.addEventListener('click', () => {
+      selectedDifficulty = btn.dataset.diff;
+      localStorage.setItem(DIFFICULTY_KEY, selectedDifficulty);
+      refresh();
+    });
+  });
+}
+initDifficultyUI();
+playerNameInput.value = localStorage.getItem(PLAYER_NAME_KEY) || '';
+
+const RING_CIRC = 2 * Math.PI * 34;
+timerRingFg.style.strokeDasharray = String(RING_CIRC);
+
+let stream = null;
+let items = [];          // balloons + bombs, both flow through here
+let particles = [];
+let confetti = [];
+let floatingTexts = [];
+let score = 0;
+let playerName = '';
+let combo = 0;
+let currentTierIndex = 0;
+let timeLeftFloat = 60;
+let lastTickSecond = 60;
+let running = false;
+let spawnTimer = 0;
+let elapsed = 0;
+let rafId = null;
+let detectionMode = 'hand'; // 'hand' once ready, 'motion' as fallback
+let fingertips = [];
+let hitFlash = 0;   // red damage flash, seconds remaining
+let goldFlash = 0;  // golden tier-up flash, seconds remaining
+let noHandSeconds = 0;         // how long the hand has been out of frame
+let noHandPenaltyTicks = 0;    // whole penalty ticks already applied for this loss streak
+const HAND_LOST_GRACE = 0.5;   // seconds of grace before the first penalty
+let handWarningActive = false;
+
+// ---------- Ambient sparkle decoration ----------
+(function spawnSparkles() {
+  const COUNT = 22;
+  for (let i = 0; i < COUNT; i++) {
+    const el = document.createElement('div');
+    el.className = 'sparkle';
+    const size = 3 + Math.random() * 4;
+    el.style.left = `${Math.random() * 100}%`;
+    el.style.width = `${size}px`;
+    el.style.height = `${size}px`;
+    el.style.animationDuration = `${7 + Math.random() * 8}s`;
+    el.style.animationDelay = `${Math.random() * 10}s`;
+    el.style.boxShadow = '0 0 6px 1px rgba(255, 210, 63, 0.7)';
+    sparklesEl.appendChild(el);
+  }
+})();
+
+// ---------- Scoreboard history (persists across sessions) ----------
+let history = loadHistory();
+renderScoreboard();
+
+function loadHistory() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(HISTORY_KEY));
+    return Array.isArray(raw) ? raw : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveHistory() {
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(history));
+}
+
+function addHistoryEntry(finalScore, tierIdx) {
+  const entry = {
+    round: history.reduce((max, item) => Math.max(max, Number(item.round) || 0), 0) + 1,
+    name: playerName,
+    score: finalScore,
+    tierName: TIER_NAMES[tierIdx],
+    tierColor: TIER_COLORS[tierIdx],
+    difficulty: currentPreset().label,
+    time: new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' }),
+    playedAt: Date.now()
+  };
+  history.unshift(entry);
+  if (history.length > HISTORY_LIMIT) history = history.slice(0, HISTORY_LIMIT);
+  saveHistory();
+  renderScoreboard();
+}
+
+function renderScoreboard() {
+  scoreListEl.innerHTML = '';
+  if (history.length === 0) {
+    scoreEmptyEl.style.display = 'block';
+    return;
+  }
+  scoreEmptyEl.style.display = 'none';
+
+  const rankedHistory = history
+    .map((entry) => ({ ...entry, score: Number(entry.score) || 0 }))
+    .sort((a, b) => b.score - a.score || (Number(b.playedAt) || 0) - (Number(a.playedAt) || 0));
+  const best = rankedHistory[0].score;
+  rankedHistory.forEach((entry, index) => {
+    const li = document.createElement('li');
+    li.className = 'score-row' + (best > 0 && entry.score === best ? ' best' : '');
+    const rank = document.createElement('span');
+    rank.className = 'score-round';
+    rank.textContent = `#${index + 1}`;
+    const name = document.createElement('span');
+    name.className = 'score-name';
+    name.title = entry.name || 'ผู้เล่นนิรนาม';
+    name.textContent = entry.name || 'ผู้เล่นนิรนาม';
+    const points = document.createElement('span');
+    points.className = 'score-points';
+    points.textContent = `${entry.score} ตั๋ว`;
+    const tier = document.createElement('span');
+    tier.className = 'score-tier';
+    tier.style.color = entry.tierColor;
+    tier.textContent = `${entry.tierName}${entry.difficulty ? ` · ${entry.difficulty}` : ''}`;
+    const time = document.createElement('span');
+    time.className = 'score-time';
+    time.textContent = entry.time;
+    li.append(rank, name, points, tier, time);
+    if (best > 0 && entry.score === best) {
+      const crown = document.createElement('span');
+      crown.className = 'score-crown';
+      crown.textContent = '👑';
+      li.appendChild(crown);
+    }
+    scoreListEl.appendChild(li);
+  });
+}
+
+clearScoresBtn.addEventListener('click', () => {
+  if (history.length === 0) return;
+  if (!confirm('ล้างประวัติคะแนนทั้งหมด?')) return;
+  history = [];
+  saveHistory();
+  renderScoreboard();
+});
+
+
+let handLandmarker = null;
+const handLandmarkerPromise = createHandLandmarker()
+  .then((hl) => { handLandmarker = hl; return hl; })
+  .catch(() => null);
+
+async function createHandLandmarker() {
+  const vision = await FilesetResolver.forVisionTasks(
+    'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+  );
+  const modelAssetPath =
+    'https://storage.googleapis.com/mediapipe-models/hand_landmarker/hand_landmarker/float16/1/hand_landmarker.task';
+  const commonOptions = {
+    runningMode: 'VIDEO',
+    numHands: 1,
+    minHandDetectionConfidence: 0.6,
+    minHandPresenceConfidence: 0.6,
+    minTrackingConfidence: 0.6
+  };
+  try {
+    return await HandLandmarker.createFromOptions(vision, {
+      ...commonOptions,
+      baseOptions: { modelAssetPath, delegate: 'GPU' }
+    });
+  } catch (e) {
+    return await HandLandmarker.createFromOptions(vision, {
+      ...commonOptions,
+      baseOptions: { modelAssetPath, delegate: 'CPU' }
+    });
+  }
+}
+
+let smoothedTips = []; // persists across frames so the point can be smoothed
+const HAND_DETECT_INTERVAL = 1000 / 30; // Keep the aim point fresh without running inference every render frame.
+let lastHandDetectTime = 0;
+
+function updateHandTracking(timestamp) {
+  if (!handLandmarker || video.readyState < 2) {
+    fingertips = [];
+    smoothedTips = [];
+    return;
+  }
+  // Running full ML inference every single render frame (often 60/sec) is
+  // what caused the lag — the game only needs a fresh fingertip position
+  // a couple dozen times a second to feel responsive, so skip most frames.
+  if (timestamp - lastHandDetectTime < HAND_DETECT_INTERVAL) {
+    return; // keep using the last known fingertips for this frame
+  }
+  lastHandDetectTime = timestamp;
+
+  prepareTrackingFrame();
+  let result;
+  try {
+    result = handLandmarker.detectForVideo(trackingCanvas, timestamp);
+  } catch (e) {
+    return;
+  }
+  if (!result || !result.landmarks || result.landmarks.length === 0) {
+    fingertips = [];
+    smoothedTips = [];
+    return;
+  }
+
+  // Landmark 8 is the actual index fingertip. Do not blend it toward landmark
+  // 7: that makes the visible aim point lag behind the finger and miss small targets.
+  const rawTips = result.landmarks.map((lm) => {
+    const tip = lm[8];
+    return {
+      x: W - tip.x * W,
+      y: tip.y * H
+    };
+  });
+
+  const next = [];
+  for (let i = 0; i < rawTips.length; i++) {
+    const raw = rawTips[i];
+    const prev = smoothedTips[i];
+    if (!prev) {
+      next.push({ x: raw.x, y: raw.y });
+    } else {
+      // Keep the aim point stable while still allowing a fast poke to lead the
+      // cursor immediately instead of leaving it behind the fingertip.
+      const dist = Math.hypot(raw.x - prev.x, raw.y - prev.y);
+      const alpha = dist < 3 ? 0.2 : Math.min(0.9, 0.38 + dist / 90);
+      next.push({
+        x: prev.x + (raw.x - prev.x) * alpha,
+        y: prev.y + (raw.y - prev.y) * alpha
+      });
+    }
+  }
+  smoothedTips = next;
+  fingertips = next.map((t) => ({ x: t.x, y: t.y }));
+}
+
+function prepareTrackingFrame() {
+  trackingCtx.save();
+  trackingCtx.filter = 'brightness(1.3) contrast(1.1)';
+  trackingCtx.drawImage(video, 0, 0, W, H);
+  trackingCtx.restore();
+}
+
+// ---------- Motion-diff fallback ----------
+const GRID_W = 20, GRID_H = 15;
+const detectCanvas = document.createElement('canvas');
+detectCanvas.width = GRID_W;
+detectCanvas.height = GRID_H;
+const detectCtx = detectCanvas.getContext('2d', { willReadFrequently: true });
+let prevFrame = null;
+let motionGrid = new Float32Array(GRID_W * GRID_H);
+const MOTION_THRESHOLD = 28;
+
+function updateMotionGrid() {
+  prepareTrackingFrame();
+  detectCtx.save();
+  detectCtx.translate(GRID_W, 0);
+  detectCtx.scale(-1, 1);
+  detectCtx.drawImage(trackingCanvas, 0, 0, GRID_W, GRID_H);
+  detectCtx.restore();
+
+  const frame = detectCtx.getImageData(0, 0, GRID_W, GRID_H).data;
+  if (prevFrame) {
+    for (let i = 0; i < GRID_W * GRID_H; i++) {
+      const p = i * 4;
+      const grey = (frame[p] + frame[p + 1] + frame[p + 2]) / 3;
+      const prevGrey = (prevFrame[p] + prevFrame[p + 1] + prevFrame[p + 2]) / 3;
+      const diff = Math.abs(grey - prevGrey);
+      motionGrid[i] = diff > MOTION_THRESHOLD ? diff : 0;
+    }
+  }
+  prevFrame = frame;
+}
+
+function motionNear(x, y) {
+  const gx = Math.min(GRID_W - 1, Math.max(0, Math.floor((x / W) * GRID_W)));
+  const gy = Math.min(GRID_H - 1, Math.max(0, Math.floor((y / H) * GRID_H)));
+  let total = 0;
+  for (let dy = -1; dy <= 1; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      const nx = gx + dx, ny = gy + dy;
+      if (nx >= 0 && nx < GRID_W && ny >= 0 && ny < GRID_H) {
+        total += motionGrid[ny * GRID_W + nx];
+      }
+    }
+  }
+  return total;
+}
+
+// ---------- Sound effects (synthesized, no audio files needed) ----------
+let audioCtx = null;
+
+function ensureAudio() {
+  if (!audioCtx) {
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  }
+  if (audioCtx.state === 'suspended') audioCtx.resume();
+}
+
+function playPop(radius) {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  const baseFreq = 950 - radius * 7;
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(baseFreq, now);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(60, baseFreq * 0.35), now + 0.12);
+  gain.gain.setValueAtTime(0.3, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.16);
+}
+
+function playBombHit() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'sawtooth';
+  osc.frequency.setValueAtTime(200, now);
+  osc.frequency.exponentialRampToValueAtTime(45, now + 0.28);
+  gain.gain.setValueAtTime(0.32, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.3);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.32);
+
+  const bufferSize = Math.floor(audioCtx.sampleRate * 0.2);
+  const buffer = audioCtx.createBuffer(1, bufferSize, audioCtx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) {
+    data[i] = (Math.random() * 2 - 1) * (1 - i / bufferSize);
+  }
+  const noise = audioCtx.createBufferSource();
+  noise.buffer = buffer;
+  const noiseGain = audioCtx.createGain();
+  noiseGain.gain.setValueAtTime(0.22, now);
+  noiseGain.gain.exponentialRampToValueAtTime(0.001, now + 0.2);
+  noise.connect(noiseGain).connect(audioCtx.destination);
+  noise.start(now);
+}
+
+function playTick() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'square';
+  osc.frequency.setValueAtTime(880, now);
+  gain.gain.setValueAtTime(0.14, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.08);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.09);
+}
+
+function playHandLostWarning() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  [330, 220].forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'square';
+    osc.frequency.value = f;
+    const t = now + i * 0.11;
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.16, t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.11);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.12);
+  });
+}
+
+function playCombo() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  const osc = audioCtx.createOscillator();
+  const gain = audioCtx.createGain();
+  osc.type = 'triangle';
+  osc.frequency.setValueAtTime(660, now);
+  osc.frequency.exponentialRampToValueAtTime(990, now + 0.1);
+  gain.gain.setValueAtTime(0.2, now);
+  gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+  osc.connect(gain).connect(audioCtx.destination);
+  osc.start(now);
+  osc.stop(now + 0.15);
+}
+
+function playTierUp() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  [784, 988, 1175].forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = f;
+    const t = now + i * 0.08;
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.25, t + 0.015);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.22);
+  });
+}
+
+function playStartJingle() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  [523.25, 659.25, 783.99].forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.value = f;
+    const t = now + i * 0.09;
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.26, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.18);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.2);
+  });
+}
+
+function playGameOverJingle() {
+  if (!audioCtx) return;
+  const now = audioCtx.currentTime;
+  [659.25, 523.25, 392.0].forEach((f, i) => {
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+    osc.type = 'sawtooth';
+    osc.frequency.value = f;
+    const t = now + i * 0.14;
+    gain.gain.setValueAtTime(0.001, t);
+    gain.gain.linearRampToValueAtTime(0.2, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.001, t + 0.28);
+    osc.connect(gain).connect(audioCtx.destination);
+    osc.start(t);
+    osc.stop(t + 0.3);
+  });
+}
+
+// ---------- Camera setup ----------
+async function startCamera() {
+  camStatus.textContent = 'กำลังขอสิทธิ์ใช้กล้อง...';
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 960 }, height: { ideal: 720 }, facingMode: 'user' },
+      audio: false
+    });
+    const videoTrack = stream.getVideoTracks()[0];
+    const capabilities = videoTrack?.getCapabilities?.();
+    if (capabilities?.exposureMode?.includes('continuous')) {
+      await videoTrack.applyConstraints({ advanced: [{ exposureMode: 'continuous' }] });
+    }
+    video.srcObject = stream;
+    await video.play();
+    camStatus.textContent = '';
+    return true;
+  } catch (err) {
+    camStatus.textContent = 'ไม่สามารถเข้าถึงกล้องได้ กรุณาอนุญาตการใช้กล้องแล้วลองใหม่ (ต้องเปิดผ่าน http://localhost หรือ https)';
+    return false;
+  }
+}
+
+// ---------- Spawning ----------
+function bombChance() {
+  const p = currentPreset();
+  return Math.min(p.bombMax, p.bombBase + elapsed * p.bombRamp);
+}
+
+function spawnItem() {
+  const p = currentPreset();
+  if (Math.random() < bombChance()) {
+    const radius = 24 + Math.random() * 10;
+    items.push({
+      type: 'bomb',
+      x: radius + Math.random() * (W - radius * 2),
+      y: H + radius,
+      radius,
+      speed: (75 + Math.random() * 55 + elapsed * 1.4) * p.speedMult,
+      points: -(18 + Math.floor(Math.random() * 15)), // -18 to -32
+      wobble: Math.random() * Math.PI * 2
+    });
+  } else {
+    const radius = 26 + Math.random() * 22;
+    const points = Math.round(60 - radius);
+    items.push({
+      type: 'balloon',
+      x: radius + Math.random() * (W - radius * 2),
+      y: H + radius,
+      radius,
+      color: BALLOON_COLORS[Math.floor(Math.random() * BALLOON_COLORS.length)],
+      speed: (55 + Math.random() * 45 + elapsed * 1.2) * p.speedMult,
+      points,
+      wobble: Math.random() * Math.PI * 2
+    });
+  }
+}
+
+function spawnFloatingText(x, y, text, color, size = 22) {
+  floatingTexts.push({ x, y, text, color, size, life: 1 });
+}
+
+function spawnBlast(x, y, colors) {
+  for (let i = 0; i < 14; i++) {
+    const angle = (Math.PI * 2 * i) / 14;
+    particles.push({
+      x, y,
+      vx: Math.cos(angle) * (60 + Math.random() * 60),
+      vy: Math.sin(angle) * (60 + Math.random() * 60),
+      life: 0.5,
+      color: colors[Math.floor(Math.random() * colors.length)]
+    });
+  }
+}
+
+function spawnConfettiRain() {
+  for (let i = 0; i < 36; i++) {
+    confetti.push({
+      x: Math.random() * W,
+      y: -20 - Math.random() * 120,
+      vx: (Math.random() - 0.5) * 60,
+      vy: 90 + Math.random() * 90,
+      rot: Math.random() * Math.PI * 2,
+      vr: (Math.random() - 0.5) * 8,
+      size: 5 + Math.random() * 5,
+      color: TIER_COLORS[Math.floor(Math.random() * TIER_COLORS.length)],
+      life: 1.6
+    });
+  }
+}
+
+// ---------- Score bar / tier system ----------
+function updateTierBar() {
+  let tierIdx = 0;
+  for (let i = TIER_THRESHOLDS.length - 1; i >= 0; i--) {
+    if (score >= TIER_THRESHOLDS[i]) { tierIdx = i; break; }
+  }
+  const maxTier = TIER_THRESHOLDS.length - 1;
+  let progress = 1;
+  if (tierIdx < maxTier) {
+    const lower = TIER_THRESHOLDS[tierIdx];
+    const upper = TIER_THRESHOLDS[tierIdx + 1];
+    progress = (score - lower) / (upper - lower);
+  }
+  progress = Math.max(0, Math.min(1, progress));
+
+  tierBarFillEl.style.width = `${progress * 100}%`;
+  tierBarFillEl.style.backgroundColor = TIER_COLORS[tierIdx];
+  tierBarFillEl.style.color = TIER_COLORS[tierIdx];
+  tierLabelEl.textContent = TIER_NAMES[tierIdx];
+  tierLabelEl.style.color = TIER_COLORS[tierIdx];
+
+  if (tierIdx > currentTierIndex) {
+    currentTierIndex = tierIdx;
+    triggerTierUp(TIER_NAMES[tierIdx], TIER_COLORS[tierIdx]);
+  }
+}
+
+function triggerTierUp(name, color) {
+  playTierUp();
+  goldFlash = 0.45;
+  spawnConfettiRain();
+  spawnFloatingText(W / 2, H / 2 - 20, `เลื่อนขั้น: ${name}!`, color, 30);
+  if (scoreCounterEl) {
+    scoreCounterEl.classList.remove('tier-up');
+    void scoreCounterEl.offsetWidth;
+    scoreCounterEl.classList.add('tier-up');
+  }
+}
+
+// ---------- Popping items ----------
+function popItem(item) {
+  if (item.type === 'bomb') {
+    combo = 0;
+    score = Math.max(0, score + item.points);
+    playBombHit();
+    spawnFloatingText(item.x, item.y, `${item.points}`, '#ff8a8a');
+    spawnBlast(item.x, item.y, ['#2a2d3d', '#e6484f', '#f2a541']);
+    hitFlash = 0.25;
+    if (scoreCounterEl) {
+      scoreCounterEl.classList.remove('penalty');
+      void scoreCounterEl.offsetWidth;
+      scoreCounterEl.classList.add('penalty');
+    }
+  } else {
+    combo += 1;
+    let gained = item.points;
+    playPop(item.radius);
+    spawnFloatingText(item.x, item.y, `+${item.points}`, '#ffd23f');
+    spawnBlast(item.x, item.y, [item.color]);
+
+    if (combo >= 3) {
+      const bonus = Math.min(40, combo * 3);
+      gained += bonus;
+      playCombo();
+      spawnFloatingText(item.x, item.y - 30, `คอมโบ x${combo} +${bonus}`, '#ff9f45', 15);
+    }
+    score += gained;
+  }
+  scoreValueEl.textContent = score;
+  updateTierBar();
+}
+
+function applyNoHandPenalty() {
+  const penalty = currentPreset().noHandPenalty;
+  combo = 0;
+  score = Math.max(0, score - penalty);
+  scoreValueEl.textContent = score;
+  updateTierBar();
+  playHandLostWarning();
+  spawnFloatingText(W / 2, H - 70, `-${penalty} หามือไม่เจอ!`, '#ff8a8a', 18);
+  hitFlash = Math.max(hitFlash, 0.2);
+  if (scoreCounterEl) {
+    scoreCounterEl.classList.remove('penalty');
+    void scoreCounterEl.offsetWidth;
+    scoreCounterEl.classList.add('penalty');
+  }
+}
+
+// ---------- Main loop ----------
+let lastTime = performance.now();
+
+function loop(now) {
+  const dt = Math.min(0.05, (now - lastTime) / 1000);
+  lastTime = now;
+  elapsed += dt;
+  if (hitFlash > 0) hitFlash = Math.max(0, hitFlash - dt);
+  if (goldFlash > 0) goldFlash = Math.max(0, goldFlash - dt);
+
+  updateTimer(dt);
+
+  if (detectionMode === 'hand') {
+    updateHandTracking(now);
+    if (fingertips.length === 0) {
+      noHandSeconds += dt;
+      if (noHandSeconds > HAND_LOST_GRACE) {
+        handWarningActive = true;
+        const activeSeconds = noHandSeconds - HAND_LOST_GRACE;
+        const wholeTicks = Math.floor(activeSeconds);
+        if (wholeTicks > noHandPenaltyTicks) {
+          noHandPenaltyTicks = wholeTicks;
+          applyNoHandPenalty();
+        }
+      }
+    } else {
+      noHandSeconds = 0;
+      noHandPenaltyTicks = 0;
+      handWarningActive = false;
+    }
+  } else {
+    updateMotionGrid();
+  }
+
+  spawnTimer -= dt;
+  const dp = currentPreset();
+  const spawnInterval = Math.max(dp.spawnMin, dp.spawnBase - elapsed * dp.spawnRamp);
+  if (spawnTimer <= 0) {
+    spawnItem();
+    spawnTimer = spawnInterval;
+  }
+
+  for (let i = items.length - 1; i >= 0; i--) {
+    const it = items[i];
+    it.y -= it.speed * dt;
+    it.wobble += dt * 2;
+    it.x += Math.sin(it.wobble) * 12 * dt;
+
+    let hit = false;
+    if (detectionMode === 'hand') {
+      for (const tip of fingertips) {
+        if (Math.hypot(tip.x - it.x, tip.y - it.y) < it.radius + 7) { hit = true; break; }
+      }
+    } else {
+      hit = motionNear(it.x, it.y) > 90;
+    }
+
+    if (hit) {
+      popItem(it);
+      items.splice(i, 1);
+      continue;
+    }
+    if (it.y < -it.radius) {
+      items.splice(i, 1);
+      if (it.type === 'balloon') combo = 0; // a missed balloon breaks the streak too
+    }
+  }
+
+  for (let i = particles.length - 1; i >= 0; i--) {
+    const p = particles[i];
+    p.x += p.vx * dt;
+    p.y += p.vy * dt;
+    p.vy += 140 * dt;
+    p.life -= dt;
+    if (p.life <= 0) particles.splice(i, 1);
+  }
+
+  for (let i = confetti.length - 1; i >= 0; i--) {
+    const c = confetti[i];
+    c.x += c.vx * dt;
+    c.y += c.vy * dt;
+    c.vy += 60 * dt;
+    c.rot += c.vr * dt;
+    c.life -= dt * 0.6;
+    if (c.life <= 0 || c.y > H + 20) confetti.splice(i, 1);
+  }
+
+  for (let i = floatingTexts.length - 1; i >= 0; i--) {
+    const t = floatingTexts[i];
+    t.y -= 42 * dt;
+    t.life -= dt * 1.1;
+    if (t.life <= 0) floatingTexts.splice(i, 1);
+  }
+
+  draw();
+
+  if (running) rafId = requestAnimationFrame(loop);
+}
+
+function updateTimer(dt) {
+  if (!running) return;
+  timeLeftFloat = Math.max(0, timeLeftFloat - dt);
+  const secondsShown = Math.ceil(timeLeftFloat);
+  if (secondsShown !== lastTickSecond) {
+    if (secondsShown <= 5 && secondsShown > 0) playTick();
+    lastTickSecond = secondsShown;
+  }
+  timeValueEl.textContent = String(secondsShown);
+
+  const fraction = timeLeftFloat / 60;
+  timerRingFg.style.strokeDashoffset = String(RING_CIRC * (1 - fraction));
+  let ringColor = 'var(--teal)';
+  if (fraction <= 0.5 && fraction > 0.17) ringColor = 'var(--bulb)';
+  else if (fraction <= 0.17) ringColor = 'var(--red)';
+  timerRingFg.style.stroke = ringColor;
+  timerRingWrap.classList.toggle('danger', fraction <= 0.17 && fraction > 0);
+
+  if (timeLeftFloat <= 0) endGame();
+}
+
+function draw() {
+  ctx.save();
+  ctx.clearRect(0, 0, W, H);
+
+  ctx.save();
+  ctx.translate(W, 0);
+  ctx.scale(-1, 1);
+  if (video.readyState >= 2) ctx.drawImage(video, 0, 0, W, H);
+  ctx.restore();
+
+  ctx.fillStyle = 'rgba(14, 17, 36, 0.38)';
+  ctx.fillRect(0, 0, W, H);
+
+  for (const it of items) {
+    if (it.type === 'bomb') drawBomb(it);
+    else drawBalloon(it);
+  }
+
+  for (const p of particles) {
+    ctx.globalAlpha = Math.max(0, p.life / 0.5);
+    ctx.fillStyle = p.color;
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, 4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.globalAlpha = 1;
+
+  for (const c of confetti) {
+    ctx.save();
+    ctx.globalAlpha = Math.max(0, Math.min(1, c.life));
+    ctx.translate(c.x, c.y);
+    ctx.rotate(c.rot);
+    ctx.fillStyle = c.color;
+    ctx.fillRect(-c.size / 2, -c.size / 2, c.size, c.size * 0.6);
+    ctx.restore();
+  }
+  ctx.globalAlpha = 1;
+
+  ctx.textAlign = 'center';
+  for (const t of floatingTexts) {
+    ctx.globalAlpha = Math.max(0, t.life);
+    ctx.fillStyle = t.color;
+    ctx.font = `bold ${t.size}px 'Poppins', sans-serif`;
+    ctx.fillText(t.text, t.x, t.y);
+  }
+  ctx.globalAlpha = 1;
+
+  if (combo >= 3) drawComboBadge();
+
+  if (detectionMode === 'hand') {
+    for (const tip of fingertips) drawFingertip(tip);
+    if (handWarningActive) drawHandWarning();
+  }
+
+  drawDifficultyBadge();
+
+  if (hitFlash > 0) {
+    ctx.fillStyle = `rgba(230, 72, 79, ${(hitFlash / 0.25) * 0.35})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+  if (goldFlash > 0) {
+    ctx.fillStyle = `rgba(255, 210, 63, ${(goldFlash / 0.45) * 0.3})`;
+    ctx.fillRect(0, 0, W, H);
+  }
+
+  ctx.restore();
+}
+
+function drawComboBadge() {
+  ctx.save();
+  const pulse = 1 + Math.sin(performance.now() / 150) * 0.06;
+  ctx.translate(W / 2, 40);
+  ctx.scale(pulse, pulse);
+  ctx.textAlign = 'center';
+  ctx.font = "bold 24px 'Bungee', cursive";
+  ctx.fillStyle = '#ffd23f';
+  ctx.shadowColor = 'rgba(255, 140, 50, 0.85)';
+  ctx.shadowBlur = 16;
+  ctx.fillText(`COMBO x${combo}`, 0, 0);
+  ctx.restore();
+}
+
+function drawHandWarning() {
+  ctx.save();
+  const pulse = 0.85 + Math.sin(performance.now() / 130) * 0.15;
+  ctx.globalAlpha = pulse;
+  ctx.textAlign = 'center';
+  ctx.font = "bold 20px 'Bungee', cursive";
+  ctx.fillStyle = '#ff8a8a';
+  ctx.shadowColor = 'rgba(230, 72, 79, 0.8)';
+  ctx.shadowBlur = 14;
+  ctx.fillText('⚠ ไม่พบนิ้ว! ยกมือกลับเข้ากล้อง', W / 2, H - 26);
+  ctx.restore();
+}
+
+function drawDifficultyBadge() {
+  const label = currentPreset().label;
+  ctx.save();
+  ctx.font = "bold 13px 'Poppins', sans-serif";
+  const paddingX = 10;
+  const textWidth = ctx.measureText(label).width;
+  const boxW = textWidth + paddingX * 2;
+  const boxH = 24;
+  ctx.fillStyle = 'rgba(14, 17, 36, 0.6)';
+  ctx.strokeStyle = 'rgba(255, 210, 63, 0.6)';
+  ctx.lineWidth = 1.5;
+  roundRect(ctx, 10, 10, boxW, boxH, 12);
+  ctx.fill();
+  ctx.stroke();
+  ctx.fillStyle = '#ffd23f';
+  ctx.textAlign = 'left';
+  ctx.textBaseline = 'middle';
+  ctx.fillText(label, 10 + paddingX, 10 + boxH / 2 + 1);
+  ctx.textBaseline = 'alphabetic';
+  ctx.restore();
+}
+
+function roundRect(c, x, y, w, h, r) {
+  c.beginPath();
+  c.moveTo(x + r, y);
+  c.arcTo(x + w, y, x + w, y + h, r);
+  c.arcTo(x + w, y + h, x, y + h, r);
+  c.arcTo(x, y + h, x, y, r);
+  c.arcTo(x, y, x + w, y, r);
+  c.closePath();
+}
+
+function drawBalloon(b) {
+  ctx.save();
+  ctx.translate(b.x, b.y);
+
+  ctx.strokeStyle = 'rgba(255,248,231,0.6)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(0, b.radius);
+  ctx.lineTo(0, b.radius + 16);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.ellipse(0, 0, b.radius * 0.82, b.radius, 0, 0, Math.PI * 2);
+  ctx.fillStyle = b.color;
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.ellipse(-b.radius * 0.28, -b.radius * 0.4, b.radius * 0.22, b.radius * 0.32, -0.4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.35)';
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.moveTo(-4, b.radius - 2);
+  ctx.lineTo(4, b.radius - 2);
+  ctx.lineTo(0, b.radius + 6);
+  ctx.closePath();
+  ctx.fillStyle = b.color;
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawBomb(item) {
+  ctx.save();
+  ctx.translate(item.x, item.y);
+
+  const pulse = 4 + Math.sin(performance.now() / 120) * 3;
+  ctx.strokeStyle = 'rgba(230,72,79,0.55)';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.arc(0, 0, item.radius + pulse, 0, Math.PI * 2);
+  ctx.stroke();
+
+  ctx.strokeStyle = '#20232f';
+  ctx.lineWidth = 5;
+  for (let i = 0; i < 8; i++) {
+    const a = (Math.PI * 2 * i) / 8 + item.wobble * 0.3;
+    const sx = Math.cos(a) * item.radius * 0.85;
+    const sy = Math.sin(a) * item.radius * 0.85;
+    ctx.beginPath();
+    ctx.moveTo(sx, sy);
+    ctx.lineTo(sx + Math.cos(a) * 10, sy + Math.sin(a) * 10);
+    ctx.stroke();
+  }
+
+  ctx.beginPath();
+  ctx.arc(0, 0, item.radius * 0.78, 0, Math.PI * 2);
+  ctx.fillStyle = '#2a2d3d';
+  ctx.fill();
+
+  ctx.beginPath();
+  ctx.ellipse(-item.radius * 0.22, -item.radius * 0.3, item.radius * 0.18, item.radius * 0.24, -0.4, 0, Math.PI * 2);
+  ctx.fillStyle = 'rgba(255,255,255,0.18)';
+  ctx.fill();
+
+  ctx.strokeStyle = '#caa15a';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(0, -item.radius * 0.78);
+  ctx.quadraticCurveTo(item.radius * 0.3, -item.radius * 1.1, item.radius * 0.15, -item.radius * 1.3);
+  ctx.stroke();
+
+  const sparkPulse = 3 + Math.sin(performance.now() / 80) * 2;
+  ctx.beginPath();
+  ctx.arc(item.radius * 0.15, -item.radius * 1.3, sparkPulse, 0, Math.PI * 2);
+  ctx.fillStyle = '#ffd23f';
+  ctx.fill();
+
+  ctx.restore();
+}
+
+function drawFingertip(tip) {
+  ctx.save();
+  ctx.strokeStyle = '#ffd23f';
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.arc(tip.x, tip.y, 14, 0, Math.PI * 2);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(tip.x - 22, tip.y); ctx.lineTo(tip.x - 8, tip.y);
+  ctx.moveTo(tip.x + 8, tip.y); ctx.lineTo(tip.x + 22, tip.y);
+  ctx.moveTo(tip.x, tip.y - 22); ctx.lineTo(tip.x, tip.y - 8);
+  ctx.moveTo(tip.x, tip.y + 8); ctx.lineTo(tip.x, tip.y + 22);
+  ctx.stroke();
+  ctx.restore();
+}
+
+// ---------- Game flow ----------
+function resetState() {
+  items = [];
+  particles = [];
+  confetti = [];
+  floatingTexts = [];
+  score = 0;
+  combo = 0;
+  currentTierIndex = 0;
+  timeLeftFloat = 60;
+  lastTickSecond = 60;
+  elapsed = 0;
+  spawnTimer = 0;
+  prevFrame = null;
+  fingertips = [];
+  smoothedTips = [];
+  lastHandDetectTime = 0;
+  hitFlash = 0;
+  goldFlash = 0;
+  noHandSeconds = 0;
+  noHandPenaltyTicks = 0;
+  handWarningActive = false;
+  scoreValueEl.textContent = '0';
+  timeValueEl.textContent = '60';
+  tierBarFillEl.style.width = '0%';
+  tierBarFillEl.style.backgroundColor = TIER_COLORS[0];
+  tierLabelEl.textContent = TIER_NAMES[0];
+  tierLabelEl.style.color = TIER_COLORS[0];
+  timerRingFg.style.strokeDashoffset = '0';
+  timerRingFg.style.stroke = 'var(--teal)';
+  timerRingWrap.classList.remove('danger');
+}
+
+async function beginGame() {
+  playerName = playerNameInput.value.trim().slice(0, 24);
+  if (!playerName) {
+    camStatus.textContent = 'กรุณาใส่ชื่อผู้เล่นก่อนเริ่มเกม';
+    playerNameInput.focus();
+    return;
+  }
+  localStorage.setItem(PLAYER_NAME_KEY, playerName);
+  ensureAudio();
+  endScreen.classList.add('hidden');
+  resetState();
+  startBtn.disabled = true;
+  restartBtn.disabled = true;
+
+  if (!stream) {
+    const ok = await startCamera();
+    if (!ok) {
+      startBtn.disabled = false;
+      restartBtn.disabled = false;
+      return;
+    }
+  }
+
+  if (!handLandmarker) {
+    camStatus.textContent = 'กำลังเตรียมระบบตรวจจับนิ้ว...';
+    handLandmarker = await Promise.race([handLandmarkerPromise, wait(4000).then(() => null)]);
+  }
+  detectionMode = handLandmarker ? 'hand' : 'motion';
+  camStatus.textContent = detectionMode === 'motion'
+    ? 'ระบบตรวจจับนิ้วไม่พร้อมใช้งาน เปลี่ยนไปใช้การตรวจจับความเคลื่อนไหวทั่วไปแทน'
+    : '';
+
+  startScreen.classList.add('hidden');
+  startBtn.disabled = false;
+  restartBtn.disabled = false;
+
+  running = true;
+  lastTime = performance.now();
+  playStartJingle();
+  rafId = requestAnimationFrame(loop);
+}
+
+function endGame() {
+  running = false;
+  if (rafId) cancelAnimationFrame(rafId);
+  playGameOverJingle();
+
+  const best = Number(localStorage.getItem(BEST_KEY) || 0);
+  const newBest = Math.max(best, score);
+  localStorage.setItem(BEST_KEY, String(newBest));
+
+  finalScoreText.textContent = `${playerName} ได้ ${score} ตั๋ว`;
+  finalTierText.textContent = `ระดับที่ไปถึง: ${TIER_NAMES[currentTierIndex]}`;
+  finalTierText.style.color = TIER_COLORS[currentTierIndex];
+  bestScoreText.textContent = `สถิติสูงสุด: ${newBest} ตั๋ว`;
+  endScreen.classList.remove('hidden');
+  addHistoryEntry(score, currentTierIndex);
+}
+
+startBtn.addEventListener('click', beginGame);
+restartBtn.addEventListener('click', beginGame);
+
+  </script>
+</body>
+</html>
